@@ -1,12 +1,12 @@
 :root {
-    --main-color: gray;
+    --main-color: black;
     --grid-size: 300px;
 }
 
 
 body {
     padding: 20px;
-    background-color: black;
+    /* background-color: black; */
 }
 
 #grid-container {
