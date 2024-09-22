@@ -1,15 +1,14 @@
+"use strict";
 // Settings
 let updateInterval = 50;
 let gridWidth = 50;
 let gridHeight = 50;
 let deadColor = "#008000";
 let aliveColor = "#000000";
-
 // Other variables
 let isPlaying = false;
-let timeoutID: number | undefined;
-let colorPicker = document.getElementById("cell-color") as HTMLInputElement;
-
+let timeoutID;
+let colorPicker = document.getElementById("cell-color");
 // Main function
 function main() {
     // Add event listener to the color picker
@@ -17,28 +16,24 @@ function main() {
         aliveColor = colorPicker.value;
         printGrid(currentGrid);
     });
-
     // Create and initialize the grid
-    let currentGrid: number[][] = 
-    new Array(gridWidth).fill(0).map(() =>
-    new Array(gridHeight).fill(0));
-
+    let currentGrid = new Array(gridWidth).fill(0).map(() => new Array(gridHeight).fill(0));
     createGrid(currentGrid); // Create the grid
     setupControls(currentGrid); // Setup the controls
 }
-
-function createGrid(grid: number[][]) {
+function createGrid(grid) {
     // Get the grid container
     let gridContainer = document.getElementById("grid-container");
-    if(!gridContainer) { console.error("Grid container not found"); return; } // Error handling
-
+    if (!gridContainer) {
+        console.error("Grid container not found");
+        return;
+    } // Error handling
     // Create the table
     let table = document.createElement("table");
-
     // Create the rows and cells
     for (let x = 0; x < gridWidth; x++) {
         let tableRow = document.createElement("tr");
-        for  (let y = 0; y < gridHeight; y++) {
+        for (let y = 0; y < gridHeight; y++) {
             let cell = document.createElement("td");
             cell.setAttribute("id", x + "-" + y); // Set the cell id to the x-y coordinates
             cell.setAttribute("class", "dead"); // Set the class of the cell to indicate its state
@@ -48,114 +43,114 @@ function createGrid(grid: number[][]) {
         table.appendChild(tableRow); // Append the row to the table
     }
     gridContainer.appendChild(table); // Append the table to the grid container
-
     // The cell click event handler function
-    function cellClickHandler(cell: HTMLTableCellElement, grid: number[][]) {
+    function cellClickHandler(cell, grid) {
         // Get the x and y coordinates of the cell
         let coordinates = cell.id.split("-");
         let x = parseInt(coordinates[0]);
         let y = parseInt(coordinates[1]);
-
         // Toggle the cell state
         let state = cell.getAttribute("class");
         if (state == "dead") {
             cell.setAttribute("class", "alive");
             grid[x][y] = 1;
-        } else {
+        }
+        else {
             cell.setAttribute("class", "dead");
             grid[x][y] = 0;
         }
-
         // Update and print the grid
         printGrid(grid);
     }
 }
-
 // The function to reset the whole grid to the dead state
-function resetGrid(grid: number[][]) {
+function resetGrid(grid) {
     for (let x = 0; x < gridWidth; x++) {
         for (let y = 0; y < gridHeight; y++) {
             grid[x][y] = 0;
         }
     }
 }
-
 // The function to interpolate between two colors and return the result based on the percentage
-function interpolateColor(color1:string, color2:string, percent:number) {
+function interpolateColor(color1, color2, percent) {
     // Parse the hexadecimal color strings of the first color
     const red1 = parseInt(color1.substring(1, 3), 16);
     const green1 = parseInt(color1.substring(3, 5), 16);
     const blue1 = parseInt(color1.substring(5, 7), 16);
-
     // Parse the hexadecimal color strings of the second color
     const red2 = parseInt(color2.substring(1, 3), 16);
     const green2 = parseInt(color2.substring(3, 5), 16);
     const blue2 = parseInt(color2.substring(5, 7), 16);
-
     // Interpolate the colors
     const red = Math.round(red1 + (red2 - red1) * percent);
     const green = Math.round(green1 + (green2 - green1) * percent);
     const blue = Math.round(blue1 + (blue2 - blue1) * percent);
-
     // Convert the interpolated colors to hexadecimal
     return "#" + red.toString(16) + green.toString(16) + blue.toString(16);
 }
-
 // The function to print the grid on to the screen
-function printGrid(grid: number[][]) {
+function printGrid(grid) {
     for (let x = 0; x < gridWidth; x++) {
         for (let y = 0; y < gridHeight; y++) {
             let cell = document.getElementById(x + "-" + y);
-            if (!cell) { console.error("Cell not found"); return; } // Error handling
+            if (!cell) {
+                console.error("Cell not found");
+                return;
+            } // Error handling
             if (grid[x][y] == 1) {
                 cell.setAttribute("class", "alive");
-            } else {
-                if(grid[x][y] > 0) {grid[x][y]--;}
+            }
+            else {
+                if (grid[x][y] > 0) {
+                    grid[x][y]--;
+                }
                 cell.setAttribute("class", "dead");
             }
             cell.style.background = interpolateColor(deadColor, aliveColor, grid[x][y] / 1);
         }
     }
 }
-
-function setupControls(grid: number[][]) {
+function setupControls(grid) {
     // Play button
     let playButton = document.getElementById("play");
-    if (!playButton) { console.error("Play button not found"); return; } // Error handling
+    if (!playButton) {
+        console.error("Play button not found");
+        return;
+    } // Error handling
     playButton.onclick = () => startButtonHandler(playButton);
-
     // Clear button
     let clearButton = document.getElementById("clear");
-    if (!clearButton) { console.error("Clear button not found"); return; } // Error handling
+    if (!clearButton) {
+        console.error("Clear button not found");
+        return;
+    } // Error handling
     clearButton.onclick = () => clearButtonHandler();
-
     // Random button
     let randomButton = document.getElementById("random");
-    if (!randomButton) { console.error("Random button not found"); return; } // Error handling
+    if (!randomButton) {
+        console.error("Random button not found");
+        return;
+    } // Error handling
     randomButton.onclick = () => randomButtonHandler();
-
-
     // The start button event handler function
-    function startButtonHandler(button: HTMLElement) {
+    function startButtonHandler(button) {
         if (isPlaying) {
             isPlaying = false;
             button.innerText = "Play";
             clearTimeout(timeoutID);
-        } else {
+        }
+        else {
             isPlaying = true;
             button.innerText = "Stop";
             gameLoop(grid);
         }
     }
-    
     // The clear button event handler function
     function clearButtonHandler() {
         console.log("Clear button clicked, Stopping the game, Resetting the grid");
-        
         resetGrid(grid);
         printGrid(grid);
     }
-
     // The random button event handler function
     function randomButtonHandler() {
         resetGrid(grid);
@@ -167,14 +162,10 @@ function setupControls(grid: number[][]) {
         printGrid(grid);
     }
 }
-
 // the game loop function
-function gameLoop(grid: number[][]) {
+function gameLoop(grid) {
     // initialize the next generation grid
-    let nextGeneration: number[][] = 
-        new Array(gridWidth).fill(0).map(() =>
-        new Array(gridHeight).fill(0));
-
+    let nextGeneration = new Array(gridWidth).fill(0).map(() => new Array(gridHeight).fill(0));
     // Check if the game is still playing if not, stop the loop
     if (isPlaying) {
         // calculate the next generation
@@ -190,18 +181,16 @@ function gameLoop(grid: number[][]) {
             }
         }
         printGrid(grid); // Print the current generation
-
         // Call the game loop function again
         timeoutID = setTimeout(() => gameLoop(grid), updateInterval);
     }
-
-    function applyRules(x: number, y: number) {
+    function applyRules(x, y) {
         let neightbors = countNeightbours(x, y);
         if (grid[x][y] == 1) {
             // if the cell has less than 2 or more than 3 neightbors, it dies
             if (neightbors < 2 || neightbors > 3) {
                 nextGeneration[x][y] = 0;
-            } 
+            }
             // if the cell has 2 or 3 neightbors, it lives
             else if (neightbors == 2 || neightbors == 3) {
                 nextGeneration[x][y] = 1;
@@ -210,7 +199,7 @@ function gameLoop(grid: number[][]) {
             else if (neightbors > 3) {
                 nextGeneration[x][y] = 0;
             }
-        } 
+        }
         else if (grid[x][y] == 0) {
             // if the cell has exactly 3 neightbors, it becomes alive
             if (neightbors == 3) {
@@ -218,8 +207,7 @@ function gameLoop(grid: number[][]) {
             }
         }
     }
-
-    function countNeightbours(x: number, y: number): number {
+    function countNeightbours(x, y) {
         let count = 0;
         // Check the eight neighboring cells
         for (let i = -1; i <= 1; i++) {
@@ -243,5 +231,5 @@ function gameLoop(grid: number[][]) {
         return count; // Return the count of alive neighboring cells
     }
 }
-
 main();
+//# sourceMappingURL=main.js.map
