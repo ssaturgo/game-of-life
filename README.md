@@ -1,9 +1,9 @@
 # Conway's Game of Life
-
 This is a **TypeScript** implementation of Conway's Game of Life.
 
 I decided to take on this project to dive into TypeScript and boy, did it pay off! I learned so much about TypeScript's syntax, type system, and all the awesome things it can do. It really leveled up my TypeScript skills and made me a better problem-solver as a programmer.
 
+[Here](https://ssaturgo.github.io/game-of-life/) is a link to preview the project. Feel free to check it out and see the Game of Life in action!
 
 ## What is this?
 Now, let me tell you a bit about Conway's Game of Life. It's this fascinating cellular automaton created by the brilliant mathematician John Horton Conway back in 1970. It's a game that doesn't require any player input once it starts. The evolution of the game is solely determined by its initial state.
@@ -23,9 +23,10 @@ These rules determine the fate of the cells in the game. Will they live, die, or
 ## Technology Used
 This project is implemented using the following technologies:
 
-**- TypeScript:** A statically typed superset of JavaScript that compiles to plain JavaScript.<br>
-**- HTML:** The standard markup language for creating web pages.<br>
-**- CSS:** The language used for styling web pages.<br>
+**- TypeScript:** A statically typed superset of JavaScript that compiles to plain JavaScript.
+**- HTML:** The standard markup language for creating web pages.
+**- CSS:** The language used for styling web pages.
+
 
 I made a conscious effort to avoid using any frameworks since I am still in the learning phase. Once I have a solid grasp of the fundamentals, I may consider exploring and learning a framework.
 
