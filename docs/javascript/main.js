@@ -1,20 +1,40 @@
 "use strict";
 // Settings
 let updateInterval = 50;
-let gridWidth = 50;
-let gridHeight = 50;
-let deadColor = "#008000";
-let aliveColor = "#000000";
+let gridWidth = 100;
+let gridHeight = 100;
+let deadColor = "#000000";
+let aliveColor = "#ffffff";
 // Other variables
 let isPlaying = false;
 let timeoutID;
 let colorPicker = document.getElementById("cell-color");
+let graphicsGrid = new Array(gridWidth).fill(0).map(() => new Array(gridHeight).fill(0));
+let lifeTime = 1;
+let fadeSlider = document.getElementById("fade-slider");
+let gridSizeSlider = document.getElementById("grid-size-slider");
+let style = document.documentElement.style;
 // Main function
 function main() {
     // Add event listener to the color picker
     colorPicker.addEventListener("input", (event) => {
         aliveColor = colorPicker.value;
-        printGrid(currentGrid);
+        style.setProperty("--main-color", aliveColor);
+        updateGraphics(currentGrid);
+    });
+    fadeSlider.addEventListener("input", (event) => {
+        lifeTime = parseInt(fadeSlider.value);
+        // resetGrid(graphicsGrid);
+    });
+    lifeTime = parseInt(fadeSlider.value);
+    gridSizeSlider.addEventListener("input", (event) => {
+        let gridContainer = document.getElementById("grid-container");
+        if (!gridContainer) {
+            console.error("Grid container not found");
+            return;
+        } // Error handling
+        gridContainer.style.width = parseInt(gridSizeSlider.value) + "px";
+        gridContainer.style.height = parseInt(gridSizeSlider.value) + "px";
     });
     // Create and initialize the grid
     let currentGrid = new Array(gridWidth).fill(0).map(() => new Array(gridHeight).fill(0));
@@ -60,7 +80,7 @@ function createGrid(grid) {
             grid[x][y] = 0;
         }
         // Update and print the grid
-        printGrid(grid);
+        updateGraphics(grid);
     }
 }
 // The function to reset the whole grid to the dead state
@@ -87,28 +107,6 @@ function interpolateColor(color1, color2, percent) {
     const blue = Math.round(blue1 + (blue2 - blue1) * percent);
     // Convert the interpolated colors to hexadecimal
     return "#" + red.toString(16) + green.toString(16) + blue.toString(16);
-}
-// The function to print the grid on to the screen
-function printGrid(grid) {
-    for (let x = 0; x < gridWidth; x++) {
-        for (let y = 0; y < gridHeight; y++) {
-            let cell = document.getElementById(x + "-" + y);
-            if (!cell) {
-                console.error("Cell not found");
-                return;
-            } // Error handling
-            if (grid[x][y] == 1) {
-                cell.setAttribute("class", "alive");
-            }
-            else {
-                if (grid[x][y] > 0) {
-                    grid[x][y]--;
-                }
-                cell.setAttribute("class", "dead");
-            }
-            cell.style.background = interpolateColor(deadColor, aliveColor, grid[x][y] / 1);
-        }
-    }
 }
 function setupControls(grid) {
     // Play button
@@ -149,17 +147,19 @@ function setupControls(grid) {
     function clearButtonHandler() {
         console.log("Clear button clicked, Stopping the game, Resetting the grid");
         resetGrid(grid);
-        printGrid(grid);
+        resetGrid(graphicsGrid);
+        updateGraphics(grid);
     }
     // The random button event handler function
     function randomButtonHandler() {
         resetGrid(grid);
+        resetGrid(graphicsGrid);
         for (let x = 0; x < gridWidth; x++) {
             for (let y = 0; y < gridHeight; y++) {
                 grid[x][y] = Math.round(Math.random());
             }
         }
-        printGrid(grid);
+        updateGraphics(grid);
     }
 }
 // the game loop function
@@ -180,7 +180,7 @@ function gameLoop(grid) {
                 grid[x][y] = nextGeneration[x][y];
             }
         }
-        printGrid(grid); // Print the current generation
+        updateGraphics(grid); // Print the current generation
         // Call the game loop function again
         timeoutID = setTimeout(() => gameLoop(grid), updateInterval);
     }
@@ -229,6 +229,28 @@ function gameLoop(grid) {
             }
         }
         return count; // Return the count of alive neighboring cells
+    }
+}
+function updateGraphics(grid) {
+    for (let x = 0; x < gridWidth; x++) {
+        for (let y = 0; y < gridHeight; y++) {
+            let cell = document.getElementById(x + "-" + y);
+            if (!cell) {
+                console.error("Cell not found");
+                return;
+            } // Error handling
+            if (grid[x][y] == 1) {
+                graphicsGrid[x][y] = lifeTime;
+                cell.setAttribute("class", "alive");
+            }
+            else if (graphicsGrid[x][y] > 0) {
+                cell.setAttribute("class", "dead");
+                if (graphicsGrid[x][y] > 0)
+                    graphicsGrid[x][y]--;
+            }
+            cell.style.background = colorPicker.value;
+            cell.style.opacity = graphicsGrid[x][y] / lifeTime + "";
+        }
     }
 }
 main();

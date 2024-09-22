@@ -1,28 +1,49 @@
+:root {
+    --main-color: gray;
+    --grid-size: 300px;
+}
+
 
 body {
     padding: 20px;
+    background-color: black;
 }
 
 #grid-container {
-    padding-bottom: 10px;
+    border: 5px solid var(--main-color);
+    border-radius: 10px;
+    padding: 10px;
+
+    width: var(--grid-size);
+    height: var(--grid-size);
+
+    transition: all 0.5s ease;
 }
 
 table {
     border-spacing: 0;
+    width: 100%;
+    height: 100%;
+
 }
 
-td {
-    border: 0.5px solid #ccc;
-    width: 10px;
-    height: 10px;
+/* td {
 
-    border-radius: 3px
-}
+} */
 
 td.dead {
-    background-color: #ffffff;
+    background: white;
 }
 
 td.alive {
-    background-color: #000000;
+    background-color: var(--main-color);
+}
+
+.controls 
+{
+    position: fixed;
+    bottom: 0;
+
+    background-color: white;
+    padding: 10px;
 }
