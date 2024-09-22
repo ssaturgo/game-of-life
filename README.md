@@ -23,9 +23,9 @@ These rules determine the fate of the cells in the game. Will they live, die, or
 ## Technology Used
 This project is implemented using the following technologies:
 
-**- TypeScript:** A statically typed superset of JavaScript that compiles to plain JavaScript.
-**- HTML:** The standard markup language for creating web pages.
-**- CSS:** The language used for styling web pages.
+**- TypeScript:** A statically typed superset of JavaScript that compiles to plain JavaScript. <br>
+**- HTML:** The standard markup language for creating web pages.<br>
+**- CSS:** The language used for styling web pages.<br>
 
 
 I made a conscious effort to avoid using any frameworks since I am still in the learning phase. Once I have a solid grasp of the fundamentals, I may consider exploring and learning a framework.
