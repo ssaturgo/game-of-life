@@ -1,12 +1,43 @@
 :root {
     --main-color: black;
-    --grid-size: 300px;
+    --grid-size: 500px;
 }
 
+* {
+    /* border: 1px solid red; */
+
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
 
 body {
-    padding: 20px;
-    /* background-color: black; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+    width: 100%;
+
+    font-family: Arial, sans-serif;
+}
+
+#content-container {
+    /* border: 1px solid red; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+#content-container h1{
+    padding: 10px;
 }
 
 #grid-container {
@@ -27,10 +58,6 @@ table {
 
 }
 
-/* td {
-
-} */
-
 td.dead {
     background: white;
 }
@@ -41,9 +68,36 @@ td.alive {
 
 .controls 
 {
+    /* border: 1px solid var(--main-color); */
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
     position: fixed;
     bottom: 0;
+    padding-bottom: 10px;
+}
 
-    background-color: white;
-    padding: 10px;
+button{
+    padding: 5px;
+    margin: 5px;
+
+    width: 80px;
+}
+
+button#stop {
+    background-color: red;
+    color: white;
+    border-radius: 3px;
+}
+
+input {
+    margin: 5px;
+    width: 30px;
+    height: 30px;
+}
+
+input[type="range"] {
+    width: 100px;
 }
