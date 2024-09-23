@@ -2,8 +2,8 @@
 let updateInterval = 50;
 let gridWidth = 100;
 let gridHeight = 100;
-let deadColor = "#000000";
-let aliveColor = "#ffffff";
+let deadColor = "#ffffff";
+let aliveColor = "#000000";
 
 // Other variables
 let isPlaying = false;
@@ -145,10 +145,12 @@ function setupControls(grid: number[][]) {
     function startButtonHandler(button: HTMLElement) {
         if (isPlaying) {
             isPlaying = false;
+            button.setAttribute("id", "play");
             button.innerText = "Play";
             clearTimeout(timeoutID);
         } else {
             isPlaying = true;
+            button.setAttribute("id", "stop");
             button.innerText = "Stop";
             gameLoop(grid);
         }
@@ -266,7 +268,7 @@ function updateGraphics(grid: number[][]) {
                 if (graphicsGrid[x][y] > 0) graphicsGrid[x][y]--;
             }
 
-            cell.style.background = colorPicker.value;
+            cell.style.background = aliveColor;
             cell.style.opacity = graphicsGrid[x][y] / lifeTime + "";
         }
     }
